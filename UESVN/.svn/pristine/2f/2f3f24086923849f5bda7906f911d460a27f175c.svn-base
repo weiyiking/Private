@@ -1,0 +1,70 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "BirdPawn.h"
+#include <PaperFlipbookComponent.h>
+#include <ConstructorHelpers.h>
+#include <PaperFlipbook.h>
+#include <Camera/CameraComponent.h>
+
+// Sets default values
+ABirdPawn::ABirdPawn()
+{
+ 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+	//需要先给小鸟加一个根
+	//CreateDefaultSubobject函数添加一个子组件
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
+
+	BirdRender = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("BirdRenderComp"));
+	//鸟依附到根组件
+	BirdRender->SetupAttachment(RootComponent);
+	//加载鸟的动画资产
+	ConstructorHelpers::FObjectFinder<UPaperFlipbook> BirdSource(TEXT("PaperFlipbook'/Game/FlappyBird/Flipbooks/Birds/FB_Bird_Red.FB_Bird_Red'"));
+	//设置加载的动画资产到资产组件
+	BirdRender->SetFlipbook(BirdSource.Object);
+
+	//创建一个相机组件
+	MainCameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCameraComp"));
+	//调整相机依附关系，放到根上
+	MainCameraComp->SetupAttachment(RootComponent);
+	//调整相机旋转
+	MainCameraComp->SetRelativeRotation(FRotator(0, -90, 0));
+	//贴脸 ，把相机向后移动，向Y轴移动
+	MainCameraComp->SetRelativeLocation(FVector(0, 50, 0));
+	//调整相机视口模式
+	MainCameraComp->SetProjectionMode(ECameraProjectionMode::Orthographic);
+	//调整相机视口尺寸
+	MainCameraComp->SetOrthoWidth(1000.f);
+
+}
+
+// Called when the game starts or when spawned
+void ABirdPawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+}
+
+void ABirdPawn::OnDoFly()
+{
+	UE_LOG(LogTemp, Log, TEXT("FFFF"));
+}
+
+// Called every frame
+void ABirdPawn::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+//安装用户的输入组件（这个函数只有Pawn有（Pawn和他的子类有，其他人没有））
+// Called to bind functionality to input
+void ABirdPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	//从这里绑定输入逻辑
+	//四个参数  1、绑定输入事件名称   2、按键响应方式   3、回调通知对象   4、回调通知函数
+	PlayerInputComponent->BindAction(TEXT("DoFly"), IE_Pressed, this, &ABirdPawn::OnDoFly);
+}
+

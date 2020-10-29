@@ -1,0 +1,61 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "UECPPGameModeBase.h"
+#include <Engine/World.h>
+#include "MyActor.h"
+#include <Engine/Engine.h>
+
+
+//template<typename T>
+//T* NewObj()
+//{
+//	return new T;
+//}
+
+
+
+
+
+void AUECPPGameModeBase::BeginPlay()
+{
+	//Super 重新定义了父类的名称
+	//显式调用父类的重写函数
+	Super::BeginPlay();//为什么调用这个函数呢？   这样是不是就可以具备父类的函数逻辑了
+	//是一个成员函数   获取当前的游戏的世界实例
+	//GetWorld();
+	//UWorld类中的工厂函数SpawnActor
+
+	//模板（泛型编程）
+	//类模板
+
+	//GetWorld()->SpawnActor<AMyActor>();
+
+	//FVector;//非U类的数据类型    向量（x，y，z）
+	//FRotator;//非U类的数据类型   旋转（pitch，yaw，roll）
+
+	//StaticClass();//成员函数，所有的U类都有  这个函数会返回你给定的类的类对象（记住不是类的实例，是类的对象）
+
+	//UClass 用来去描述类的对象的数据类型  一种类的数据类型
+	//类是静态的
+
+	GetWorld()->SpawnActor<AMyActor>();
+	//AMyActor::StaticClass() 返回的是AMyActor类的对象
+	//里氏转换规则   父亲可以抱起儿子，儿子不能抱起父亲
+	MyActor = GetWorld()->SpawnActor(AMyActor::StaticClass());//运行中确定的Amyactor
+}
+
+void AUECPPGameModeBase::Fun()
+{
+	//MyActor->Destroy();
+
+	//双冒号文本之前加了L代表这是宽字符文本串
+
+	//如何在视口输出日志
+	//1、参数：输出的文本键值(-1则永远添加的是新的文本条目，其他则去选覆盖旧有的)
+	//2、参数：显式时间
+	//3、颜色
+	//4、参数：文本内容
+	//GEngine->AddOnScreenDebugMessage(0, 3, FColor::Red, TEXT("Hello"), true, FVector2D(3,3));
+
+
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>zuserver</Title>
+			<Shortcut>zuserver</Shortcut>
+			<Description>UE4 快速Server函数</Description>
+			<Author>Zery</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>fn</ID>
+					<ToolTip>函数名称</ToolTip>
+					<Default>FuncName</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="cpp">
+        <![CDATA[
+      UFUNCTION(Server, Reliable, WithValidation)
+      void Server_$fn$();
+	    void Server_$fn$_Implementation();
+	    bool Server_$fn$_Validate();
+      ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,10 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "FBGameMode.h"
+#include "BirdPawn.h"
+
+AFBGameMode::AFBGameMode()
+{
+	//设置游戏的默认玩家类
+	DefaultPawnClass = ABirdPawn::StaticClass();
+}

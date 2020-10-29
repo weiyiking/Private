@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>zuinterface</Title>
+			<Shortcut>zuinterface</Shortcut>
+			<Description>UE4接口构建</Description>
+			<Author>Zery</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>uname</ID>
+					<ToolTip>接口类名</ToolTip>
+					<Default>UZInterface</Default>
+				</Literal>
+				<Literal>
+					<ID>iname</ID>
+					<ToolTip>接口反射类名</ToolTip>
+					<Default>IZInterface</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="cpp"><![CDATA[//自动构建结构 保证接口名相同 前缀U I区分
+				UINTERFACE(Blueprintable)
+				class $uname$ : public UInterface
+				{
+					GENERATED_UINTERFACE_BODY()
+				};
+
+				class $iname$
+				{
+					GENERATED_IINTERFACE_BODY()
+				public:
+					UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+					void TestFunc();	
+				};
+				
+				//将下面代码copy到cpp文件中
+				$uname$::$uname$(const FObjectInitializer& ObjectInitializer) :Super(ObjectInitializer)
+				{
+
+				}]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

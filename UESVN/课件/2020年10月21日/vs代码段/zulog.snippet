@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>zulog</Title>
+			<Shortcut>zulog</Shortcut>
+			<Description>UE4 快速Log</Description>
+			<Author>Zery</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>name</ID>
+					<ToolTip>日志分类</ToolTip>
+					<Default>LogTemp</Default>
+				</Literal>
+				<Literal>
+					<ID>log</ID>
+					<ToolTip>日志级别</ToolTip>
+					<Default>Log</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="cpp"><![CDATA[UE_LOG($name$, $log$, TEXT("$selected$$end$"));]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

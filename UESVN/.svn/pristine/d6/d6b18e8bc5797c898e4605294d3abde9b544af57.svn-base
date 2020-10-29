@@ -1,0 +1,400 @@
+﻿// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "UECPPGameModeBase.h"
+#include <Engine/World.h>
+#include "MyActor.h"
+#include <Engine/Engine.h>
+
+
+//template<typename T>
+//T* NewObj()
+//{
+//	return new T;
+//}
+
+DEFINE_LOG_CATEGORY(ZLog);
+
+//注意宏的名字，不能改，后面的空间名称（双引号里的）可以修改
+#define LOCTEXT_NAMESPACE "UECPP"
+
+
+#define MYLOG(M, ...) UE_LOG(ZLog, Log, TEXT(M), ##__VA_ARGS__)
+
+void AUECPPGameModeBase::BeginPlay()
+{
+	//Super 重新定义了父类的名称
+	//显式调用父类的重写函数
+	Super::BeginPlay();//为什么调用这个函数呢？   这样是不是就可以具备父类的函数逻辑了
+	//是一个成员函数   获取当前的游戏的世界实例
+	//GetWorld();
+	//UWorld类中的工厂函数SpawnActor
+
+	//模板（泛型编程）
+	//类模板
+
+	//GetWorld()->SpawnActor<AMyActor>();
+
+	//FVector;//非U类的数据类型    向量（x，y，z）
+	//FRotator;//非U类的数据类型   旋转（pitch，yaw，roll）
+
+	//StaticClass();//成员函数，所有的U类都有  这个函数会返回你给定的类的类对象（记住不是类的实例，是类的对象）
+
+	//UClass 用来去描述类的对象的数据类型  一种类的数据类型
+	//类是静态的
+
+	GetWorld()->SpawnActor<AMyActor>();
+	//AMyActor::StaticClass() 返回的是AMyActor类的对象
+	//里氏转换规则   父亲可以抱起儿子，儿子不能抱起父亲
+	MyActor = GetWorld()->SpawnActor(AMyActor::StaticClass());//运行中确定的Amyactor
+}
+
+void AUECPPGameModeBase::Fun()
+{
+	MyActor->Destroy();
+
+	//双冒号文本之前加了L代表这是宽字符文本串
+
+	//如何在视口输出日志
+	//1、参数：输出的文本键值(-1则永远添加的是新的文本条目，其他则去选覆盖旧有的)
+	//2、参数：显式时间
+	//3、颜色
+	//4、参数：文本内容
+	//GEngine->AddOnScreenDebugMessage(0, 3, FColor::Red, TEXT("Hello"), true, FVector2D(3,3));
+
+	//敏感大小写
+	//LogTemp 引擎提供给我们一个全局的日志分类项
+	/*UE_LOG(ZLog, Log, TEXT("OK"));
+
+	UE_LOG(ZLog, Log, TEXT("BALABLA"));*/
+
+	/*MYLOG("OK");
+	MYLOG("HAHAHAHHA");*/
+
+	UE_LOG(LogTemp, Log, TEXT("我今年%d岁"), 20);
+}
+
+void AUECPPGameModeBase::StringTest()
+{
+	int num = 10;
+
+	num += 10;
+
+	//FString
+
+	//构建FString
+	FString s1 = TEXT("OK S1");
+	FString s2(TEXT("100"));
+
+	//组合两个字符串
+	FString s3 = s1.Append(s2);
+
+
+	//字符串前加*号是转换为TCHAR类型的字符串
+	const TCHAR* charStr = *s3;
+
+	//常用数据转换到FString
+	FVector(10, 20, 30).ToString();//Vector转FString
+	FRotator(10, 20, 30).ToString();//Rotator转FString
+	FString::FromInt(30);//将整型转成FString
+	FString::SanitizeFloat(3.5f);  //浮点到FString
+	FColor::Red.ToString();//颜色转FString
+	true ? TEXT("true") : TEXT("false");//如何把布尔转为字符串
+
+	//从FString到其他
+	//FString到布尔
+	s1.ToBool();//规则是，如果字符串是“0”，那么结果就是false，反之都是true
+	//FString到int
+	FCString::Atoi(*s2);
+	//FString到float
+	s3 = TEXT("6.5");
+	FCString::Atof(*s3);
+
+	//比较字符串是否相等 比较内容是否相同
+	//== 最常用的一种比较字符串的方法
+	s1 = TEXT("abc");
+	s2 = TEXT("ABC");
+	if (s1 == s2)//这里打印的是相同的 因为FString比较的时候默认文本是忽略大小写的
+	{
+		UE_LOG(LogTemp, Log, TEXT("相同"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("不同"));
+	}
+	//Equals 用来比较两个串是否相同 这个兄弟能设定是不是区分大小写
+	if (s1.Equals(s2, ESearchCase::CaseSensitive))//第二个参数就是关心大小写
+	{
+		UE_LOG(LogTemp, Log, TEXT("相同"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("不同"));
+	}
+
+	//如何检查串里是不是包含了某一个串
+	s1 = TEXT("akhdfkafsd");
+	s2 = TEXT("KH2D");
+	
+	if (s1.Contains(s2, ESearchCase::CaseSensitive, ESearchDir::FromEnd))
+	{
+		UE_LOG(LogTemp, Log, TEXT("包含"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("不包含"));
+	}
+	
+	//检查字符串中是否包含某一个串，并返回串出现的位置
+	int32 Index = s1.Find(s2);
+	UE_LOG(LogTemp, Log, TEXT("===  %d"), Index);
+	//参数 按照参表顺序进行解释
+	//1、查找的串内容
+	//2、是否查找忽略大小写（默认是忽略）
+	//3、查找的方向
+	//4、查找的起始位置
+
+	//切割字符串
+	s1 = TEXT("abcd,dce");
+	FString Left;
+	FString Right;
+
+	s1.Split(TEXT(","), &Left, &Right);
+	//UE_LOG(LogTemp, Log, TEXT("%s  ===   %s"), *Left, *Right);
+
+	//如果想要切割更多的串结构怎么办
+	s1 = TEXT("a,b,c,d,e,f,g,h,i");
+	TArray<FString> Out;
+	s1.ParseIntoArray(Out, TEXT(","));//裁切字符串
+	//遍历
+	/*for (int32 i=0; i<Out.Num(); i++)
+	{
+		UE_LOG(LogTemp, Log, TEXT("== %s"), *Out[i]);;
+	}*/
+
+
+	//转码操作
+	char* n = "abcd";//c++编译器来说这个串是阿斯克编码的串
+	TCHAR* tn = ANSI_TO_TCHAR(n);//将阿斯克编码转成虚幻引擎的平台编码（wchar）
+	UE_LOG(LogTemp, Log, TEXT("=== %s"), tn);//如果直接输出n会出现乱码，必须要进行转码动作
+
+	char* nt = "你好";//是一个UTF
+	TCHAR* tt = UTF8_TO_TCHAR(nt);//转换为TCHAR的文本串
+	UE_LOG(LogTemp, Log, TEXT("=== %s"), tt);//如果直接输出会出错必须要转码
+	
+	//检查串结尾是否是给定的串
+	s1 = TEXT("1.exe");
+	/*if (s1.EndsWith(TEXT(".txt")))
+	{
+		UE_LOG(LogTemp, Log, TEXT("是TXT文本"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("不是文本"));
+	}*/
+
+	//替换api
+	s1 = TEXT("ajjd");
+	s2 = s1.Replace(TEXT("j"), TEXT("M"));//s2将是 “aMMd”
+
+
+	//探讨了以下，为什么UE_LOG中的第三个参数为什么不能直接使用TCHAR指针
+	//int data[10] = { 1,2,3,4,5,6,6 };
+
+	////pData数组指针  data数组
+	//int* pData = data;
+
+	////TEXT宏构建的是一个字符串（字符数组）   TCHAR* 构建的是一个指针（如果你用数组赋值，就是数组指针）
+	//TCHAR* t = TEXT("OK");
+
+	//UE_LOG(LogTemp, Log, t);
+
+	//TCHAR* 有可能是一个字符地址，也有可能是一个字符串
+
+	//输出FString
+	//UE_LOG(LogTemp, Log, TEXT("== %d   %f"), FCString::Atoi(*s2), FCString::Atof(*s3));
+
+	//FString中重载的运算符 + += /
+	s1 = TEXT("hehe");
+	s2 = TEXT("heihei");
+
+	s3 = s1 + s2;//拼接字符串
+	UE_LOG(LogTemp, Log, TEXT("== %s"), *s3);
+
+	s1 += s2;//和上面讲过的Append函数一样
+	UE_LOG(LogTemp, Log, TEXT("== %s"), *s1);
+
+	//你看到的除法不是除法，变成了路径分隔符（与平台无关的）\\  /
+	s3 = s1 / s2;
+	UE_LOG(LogTemp, Log, TEXT("== %s"), *s3);
+
+	//格式化文本
+	s1 = FString::Printf(TEXT("我叫%s，今年%d岁，身高%f"), TEXT("二狗"), 15, 160.f);
+	//使用格式化参数列表
+	TArray<FStringFormatArg> Args;
+	Args.Add(FStringFormatArg(TEXT("二狗")));
+	Args.Add(FStringFormatArg(15));
+	Args.Add(FStringFormatArg(160.f));
+	Args.Add(60);
+
+
+	s2 = FString::Format(TEXT("我叫{0}，今年{1}岁，身高{2}"), Args);
+
+	UE_LOG(LogTemp, Log, TEXT("==  %s"), *s2);
+
+
+}
+
+void AUECPPGameModeBase::NameTest()
+{
+	//如何构建一个FName
+	FName n1 = TEXT("aaa");
+	FName n2(TEXT("KDKD"));
+
+	//如何输出一个FName
+	UE_LOG(LogTemp, Log, TEXT("= %s"), *n1.ToString());
+
+	//如何将一个FString转到FName
+	FString s1 = TEXT("abc");
+	FName n3(*s1);//从FString到FName
+
+	//比较两个Name是否相同
+	if (n1 == n2)
+	{
+
+	}
+
+}
+
+void AUECPPGameModeBase::TextTest()
+{
+	//Test
+	FText t1 = FText::Format(LOCTEXT("k1", "我叫{0}, 今年{1}岁"), FText::FromString(TEXT("二狗")), FText::AsNumber(50));
+
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, t1.ToString());
+
+
+	//构建FText方法
+	//由于FText是给UI上使用的，为了解决多国语言适配问题，增加了空间和键值
+	//第一种方法
+//	FText t1 = NSLOCTEXT("UECPP", "k1", "balabala");//三个参数第一个，空间名称，第二个键值，第三个内容
+//	//第二种方法 直接定义作用域空间名称
+//	FText t2 = LOCTEXT("k2", "babababbabb");//第一个参数键值，第二个内容
+//
+//	//如何输出FText
+//	//UE_LOG(LogTemp, Log, TEXT("===  %s"), *t1.ToString());
+//	//UE_LOG(LogTemp, Log, TEXT("===  %s"), *t2.ToString());
+//
+//	//从FText转到FString或是转到FName的方法
+//	//FText-》FString
+//	t1.ToString();
+//	//FText-》FName 从FText没有办法直接到FName 
+//	FName n1(*t1.ToString());
+//
+//	//从其他字符串到FText
+//	//从FString-》FText
+//	FText::FromString(FString(TEXT("ha")));
+//	//从FName-》FText
+//	FText::FromName(n1);
+//
+//
+//	//从其他数据转到FText
+//	//0.62
+//	//t1 = FText::AsPercent(0.62f);//将一个数字转成百分比
+//	//UE_LOG(LogTemp, Log, TEXT("== %s"), *t1.ToString());
+//	//t1 = FText::AsCurrency(60, TEXT("Y"));//转货币
+//	//UE_LOG(LogTemp, Log, TEXT("== %s"), *t1.ToString());
+//	//t1 = FText::AsDate(165263252236622);//转日期
+//	//UE_LOG(LogTemp, Log, TEXT("== %s"), *t1.ToString());
+//	//t1 = FText::AsMemory(1024000);//转内存的
+//	//UE_LOG(LogTemp, Log, TEXT("== %s"), *t1.ToString()); 
+//
+//	//比较
+//	if (t1.EqualTo(t2))//逐内容比较，在意大小写
+//	{
+//	}
+//
+//	if (t1.EqualToCaseIgnored(t2))//忽略大小写的比较
+//	{
+//	}
+//
+//	//我有一个问题，为啥我们用FText::FromString构建的Text没有空间名称和键值
+//	//从设计角度来说一般来讲，动态文本（昵称，帮派）是不需要进行本地化操作的~
+//
+//	//格式化文本
+//	//占位格式化
+//	FFormatArgumentValue;//格式化文本中的数据格式
+//	
+//	FFormatArgumentValue v1(FText::FromString(TEXT("铁蛋")));
+//	FFormatArgumentValue v2(FText::AsNumber(10));
+//
+////	t1 = FText::Format(LOCTEXT("k3", "我叫{0},今年{1}岁"), v1, v2);
+//	t1 = FText::Format(LOCTEXT("k3", "我叫{0},今年{1}岁"), FText::FromString(TEXT("aaa")), v2);
+//
+//	UE_LOG(LogTemp, Log, TEXT("== %s"), *t1.ToString());
+//
+//	//键值格式
+//	FFormatNamedArguments Args;//键值数据表
+//	Args.Add(TEXT("name"), FText::FromString(TEXT("铁蛋")));//参数1是键值名称，参数2是内容
+//	Args.Add(TEXT("age"), FText::AsNumber(20));//参数1是键值名称，参数2是内容
+//
+//	t1 = FText::Format(LOCTEXT("k4", "我叫{name},今年{age}岁"), Args);
+//
+//	UE_LOG(LogTemp, Log, TEXT("== %s"), *t1.ToString());
+//
+//
+//
+//	FText t1 = NSLOCTEXT("uecpp", "k1", "aa");
+//	FName n1(*t1.ToString());
+}
+
+void AUECPPGameModeBase::ChangeCulture(const FString& code)
+{
+	//切换平台语言
+	FInternationalization::Get().SetCurrentCulture(code);
+}
+
+//void AUECPPGameModeBase::Say(int32 Num)
+//{
+//	UE_LOG(LogTemp, Log, TEXT("我今年%d岁"), Num);
+//	UE_LOG(LogTemp, Log, TEXT("我今年%f岁"), 6.2f);
+//	UE_LOG(LogTemp, Log, TEXT("我今年%s岁"), TEXT("hahaha"));
+//}
+//
+//void AUECPPGameModeBase::Hi(int32 Num, float fNum)
+//{
+//	//UE_LOG(LogTemp, Log, TEXT("我今年%d岁，身高%f厘米，住在%s"), Num, fNum, TEXT("天津"));
+//
+//	MYLOG("我今年%d岁，身高%f厘米，住在%s", Num, fNum, TEXT("天津"));
+//
+//
+//	//FString Nm = GetName();//获取当前Actor在世界中的名字
+//	//星号在哪里有见过？
+//	//1、乘法
+//	//2、在等号左边，声明指针
+//	//3、在指针之前是解引用
+//	//4、在栈对象之前？（去你的栈对象类型中查找运算符重载关系了）
+//
+//
+//	//*号放在FString返回的是一个TCHAR类型的字符串指针（和你的TEXT宏构建的串意义相同）
+//	//UE_LOG(LogTemp, Log, TEXT("这个Actor叫%s"), *Nm);
+//
+//
+//	TCHAR* h = TEXT("heheh");//虚幻中的文本串 虚幻引擎解析这个文本串是按照UTF标准解码
+//	ANSICHAR* ah = TCHAR_TO_ANSI(h);//把编码关系从TCHAR转到ANSI编码
+//	//"";//c类型的字符串   这里面只有数据
+//	//string;//c++字符串   这里面不仅仅有数据，还有行为（他有函数）
+//
+//
+//}
+//
+//void AUECPPGameModeBase::HiSay(const FString& Msg)
+//{
+//	UE_LOG(LogTemp, Log, TEXT("这个Actor叫%s"), *Msg);
+//}
+
+
+
+
+
+//卸载掉空间宏
+#undef LOCTEXT_NAMESPACE

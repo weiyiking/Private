@@ -1,0 +1,47 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "BirdPawn.h"
+#include <PaperFlipbookComponent.h>
+#include <ConstructorHelpers.h>
+#include <PaperFlipbook.h>
+
+// Sets default values
+ABirdPawn::ABirdPawn()
+{
+ 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+	//需要先给小鸟加一个根
+	//CreateDefaultSubobject函数添加一个子组件
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
+
+	BirdRender = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("BirdRenderComp"));
+	//鸟依附到根组件
+	BirdRender->SetupAttachment(RootComponent);
+	//加载鸟的动画资产
+	ConstructorHelpers::FObjectFinder<UPaperFlipbook> BirdSource(TEXT("PaperFlipbook'/Game/FlappyBird/Flipbooks/Birds/FB_Bird_Red.FB_Bird_Red'"));
+	//设置加载的动画资产到资产组件
+	BirdRender->SetFlipbook(BirdSource.Object);
+}
+
+// Called when the game starts or when spawned
+void ABirdPawn::BeginPlay()
+{
+	Super::BeginPlay();
+	
+}
+
+// Called every frame
+void ABirdPawn::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+// Called to bind functionality to input
+void ABirdPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+}
+

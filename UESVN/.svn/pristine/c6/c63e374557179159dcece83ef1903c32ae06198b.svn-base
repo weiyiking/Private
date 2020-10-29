@@ -1,0 +1,83 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Pawn.h"
+#include "BirdPawn.generated.h"
+
+//class A; //声明
+//
+////不完整的类我们可以用来声明指针，或是声明引用，禁止声明对象
+//
+//A * pa;
+//A& ra;
+//A a;//错误
+
+
+//前向声明 旨在一个作用域内声明一个不完整的类，用于构建类的指针数据类型或是引用数据类型，从而规避头文件引入嵌套问题
+class UPaperFlipbookComponent;
+class USceneComponent;
+class UCameraComponent;
+class UCurveFloat;
+class USoundWave;
+
+
+UENUM(BlueprintType)
+enum class EBirdState : uint8
+{
+	EBS_Wait,
+	EBS_Fly,
+	EBS_Drop,
+	EBS_Dead
+};
+
+
+
+UCLASS()
+class FLAPPYBIRD_API ABirdPawn : public APawn
+{
+	GENERATED_BODY()
+
+public:
+	// Sets default values for this pawn's properties
+	ABirdPawn();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	void OnDoFly();
+
+	void LockBirdPhysicState();
+
+	void UpdateFace(float DeltaTime);
+
+	void UpdateBirdFloat(float DeltaTime);
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void ChangeBirdState(EBirdState State);
+
+
+protected:
+	UPROPERTY(VisibleAnywhere)
+	UPaperFlipbookComponent* BirdRender;
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* MainCameraComp;
+	UPROPERTY()
+	UCurveFloat* BirdFloatCurve;
+
+	float BirdFloatTimeTick;
+
+	EBirdState CurrentState;//描述鸟的状态
+	UPROPERTY()
+	USoundWave* FlySound;
+
+
+};

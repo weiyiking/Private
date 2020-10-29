@@ -1,0 +1,22 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "UECPPGameModeBase.h"
+#include <Engine/World.h>
+#include "MyActor.h"
+
+
+
+
+
+void AUECPPGameModeBase::BeginPlay()
+{
+	//Super 重新定义了父类的名称
+	//显式调用父类的重写函数
+	Super::BeginPlay();//为什么调用这个函数呢？   这样是不是就可以具备父类的函数逻辑了
+
+	//是一个成员函数   获取当前的游戏的世界实例
+	//GetWorld();
+	GetWorld()->SpawnActor<AMyActor>();
+
+
+}

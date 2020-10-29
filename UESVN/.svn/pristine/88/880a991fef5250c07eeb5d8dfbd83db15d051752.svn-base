@@ -1,0 +1,29 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "LandActor.h"
+#include <Components/StaticMeshComponent.h>
+
+// Sets default values
+ALandActor::ALandActor()
+{
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = false;
+
+	MeshRenderComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
+	SetRootComponent(MeshRenderComp);
+}
+
+// Called when the game starts or when spawned
+void ALandActor::BeginPlay()
+{
+	Super::BeginPlay();
+	
+}
+
+// Called every frame
+void ALandActor::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+

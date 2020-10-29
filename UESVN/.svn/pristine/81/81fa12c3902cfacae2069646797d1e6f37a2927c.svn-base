@@ -1,0 +1,89 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "FBGameMode.h"
+#include "BirdPawn.h"
+#include "PipeActor.h"
+#include <Kismet/GameplayStatics.h>
+#include "LandActor.h"
+#include "BackgroudActor.h"
+
+AFBGameMode::AFBGameMode()
+{
+	//设置游戏的默认玩家类
+	DefaultPawnClass = ABirdPawn::StaticClass();
+}
+
+void AFBGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	////A 儿子  B类
+	//TArray<AActor*> Array;
+	////去查找一下场景中的背景Actor
+	////参数1：世界上下文   主要用途是告诉函数你所在的世界是哪个（这是一个佐证数据，主要用来甄别查询范围的）
+	////参数2：你要搜寻的对象的类型
+	////参数3：搜寻结果保存列表数组
+	//UGameplayStatics::GetAllActorsOfClass(this, APipeActor::StaticClass(), Array);
+
+	//for (int32 i=0; i<Array.Num(); i++)
+	//{
+	//	//动态指针转换
+	//	//有理
+	//	APipeActor* Pipe = Cast<APipeActor>(Array[i]);//Cast是一个安全指针转换函数，当给定的参数指针于目标模板（也就是尖括号里面的类型），具备合理转换时，则提供转换后的指针，否则返回空
+	//	if (Pipe)
+	//	{
+	//		PipeGroupActor = Pipe;
+	//	}
+	//	else
+	//	{
+
+	//	}
+	//}
+	////清理容器
+	//Array.Reset();
+
+	//UGameplayStatics::GetAllActorsOfClass(this, ALandActor::StaticClass(), Array);
+
+	//NULL;
+	//0;
+	//nullptr;//C++11新特性 用来标记指针类型空
+
+
+	BirdPawn = Cast<ABirdPawn>(UGameplayStatics::GetPlayerPawn(this, 0));
+}
+
+void AFBGameMode::Fun()
+{
+	if (PipeGroupActor)
+	{
+		PipeGroupActor->SetSpeed(60);
+	}
+	if (LandActor)
+	{
+		LandActor->SetSpeed(0.1f);
+	}
+	if (BgActor)
+	{
+		BgActor->RandBgSprite();
+	}
+	if (BirdPawn)
+	{
+		BirdPawn->ChangeBirdState(EBirdState::EBS_Fly);
+	}
+}
+
+void AFBGameMode::ChangeBirdDrop()
+{
+	if (PipeGroupActor)
+	{
+		PipeGroupActor->SetSpeed(0);
+	}
+	if (LandActor)
+	{
+		LandActor->SetSpeed(0.f);
+	}
+	if (BirdPawn)
+	{
+		BirdPawn->ChangeBirdState(EBirdState::EBS_Drop);
+	}
+}

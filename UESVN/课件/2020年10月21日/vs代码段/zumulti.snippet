@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>zumulti</Title>
+			<Shortcut>zumulti</Shortcut>
+			<Description>UE4 快速Multi函数</Description>
+			<Author>Zery</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>fn</ID>
+					<ToolTip>函数名称</ToolTip>
+					<Default>FuncName</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="cpp">
+        <![CDATA[
+      UFUNCTION(NetMulticast, Reliable)
+      void Multi_$fn$();
+	    void Multi_$fn$_Implementation();
+      ]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

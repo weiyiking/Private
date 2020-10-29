@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>zuenum</Title>
+			<Shortcut>zuenum</Shortcut>
+			<Description>UE4枚举代码段</Description>
+			<Author>Zery</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>name</ID>
+					<ToolTip>枚举名</ToolTip>
+					<Default>EName</Default>
+				</Literal>
+				<Literal>
+					<ID>type</ID>
+					<ToolTip>枚举值类型</ToolTip>
+					<Default>uint8</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="cpp"><![CDATA[
+				UENUM(BlueprintType)
+				enum class $name$ : $type$
+	{
+	        $selected$ $end$
+	};]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

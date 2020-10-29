@@ -1,0 +1,40 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "FBGameMode.h"
+#include "BirdPawn.h"
+#include "PipeActor.h"
+#include <Kismet/GameplayStatics.h>
+
+AFBGameMode::AFBGameMode()
+{
+	//设置游戏的默认玩家类
+	DefaultPawnClass = ABirdPawn::StaticClass();
+}
+
+void AFBGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	TArray<AActor*> Array;
+	//去查找一下场景中的背景Actor
+	UGameplayStatics::GetAllActorsOfClass(this, APipeActor::StaticClass(), Array);
+
+	for (int32 i=0; i<Array.Num(); i++)
+	{
+		//有理
+		APipeActor* Pipe = Cast<APipeActor>(Array[i]);//Cast是一个安全指针转换函数，当给定的参数指针于目标模板（也就是尖括号里面的类型），具备合理转换时，则提供转换后的指针，否则返回空
+		if (Pipe)
+		{
+			PipeGroupActor = Pipe;
+		}
+	}
+
+}
+
+void AFBGameMode::Fun()
+{
+	if (PipeGroupActor)
+	{
+		PipeGroupActor->SetSpeed(60);
+	}
+}

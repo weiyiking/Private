@@ -1,0 +1,46 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/GameModeBase.h"
+#include "UECPPGameModeBase.generated.h"
+
+
+DECLARE_LOG_CATEGORY_EXTERN(ZLog, Log, All);
+/**
+ * 
+ */
+UCLASS()
+class UECPP_API AUECPPGameModeBase : public AGameModeBase
+{
+	GENERATED_BODY()
+	
+
+protected:
+	virtual void BeginPlay() override;
+
+	UFUNCTION(Exec)
+	void Fun();
+
+	UFUNCTION(Exec)
+	void StringTest();
+
+	UFUNCTION(Exec)
+	void NameTest();
+
+	UFUNCTION(Exec)
+	void TextTest();
+
+	/*UFUNCTION(Exec)
+	void Say(int32 Num);
+	UFUNCTION(Exec)
+	void Hi(int32 Num, float fNum);
+	UFUNCTION(Exec)
+	void HiSay(const FString& Msg);*/
+
+
+protected:
+	AActor* MyActor;
+
+};

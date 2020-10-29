@@ -1,0 +1,51 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "PipeActor.h"
+#include <PaperSprite.h>
+#include <ConstructorHelpers.h>
+#include <PaperSpriteComponent.h>
+
+// Sets default values
+APipeActor::APipeActor()
+{
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+	//构建一下根组件
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
+
+	//先把两个管子的资产加载进来
+	ConstructorHelpers::FObjectFinder<UPaperSprite> UpSpriteObj(TEXT("PaperSprite'/Game/FlappyBird/Textures/Pipe/pipe_down_Sprite.pipe_down_Sprite'"));
+	ConstructorHelpers::FObjectFinder<UPaperSprite> DownSpriteObj(TEXT("PaperSprite'/Game/FlappyBird/Textures/Pipe/pipe_up_Sprite.pipe_up_Sprite'"));
+
+	USceneComponent* PipeGroup = CreateDefaultSubobject<USceneComponent>(TEXT("PipeGroup"));
+	//创建两根管子的渲染组件
+	UPaperSpriteComponent* UpRender = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PipeRenderUp"));
+	UPaperSpriteComponent* DownRender = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PipeRenderDown"));
+	//设置精灵图片
+	UpRender->SetSprite(UpSpriteObj.Object);
+	DownRender->SetSprite(DownSpriteObj.Object);
+	//设置依附层级关系
+	UpRender->SetupAttachment(PipeGroup);
+	DownRender->SetupAttachment(PipeGroup);
+
+	PipeGroup->SetupAttachment(RootComponent);
+
+
+
+}
+
+// Called when the game starts or when spawned
+void APipeActor::BeginPlay()
+{
+	Super::BeginPlay();
+	
+}
+
+// Called every frame
+void APipeActor::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
